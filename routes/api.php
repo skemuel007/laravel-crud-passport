@@ -29,4 +29,5 @@ Route::group([
 });
 
 Route::middleware('auth:api')->group(function() {
+    Route::apiResource('course', 'API\CourseController');
 });
