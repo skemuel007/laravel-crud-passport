@@ -27,3 +27,6 @@ Route::group([
         Route::get('user', 'API\AuthController@user');
     });
 });
+
+Route::middleware('auth:api')->group(function() {
+});
