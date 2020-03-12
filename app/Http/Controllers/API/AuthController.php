@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Validator;
@@ -75,12 +76,18 @@ class AuthController extends Controller
         $tokenResult = $user->createToken('LaravelWithCrudPassport');
         $token = $tokenResult->token;
 
+        // add token expiry
+        $token->expires_at = Carbon::now()->addWeeks(1);
+
         $token->save();
 
         return response()->json([
             'success' => true,
             'message' => 'Login successful',
-            'token' => $tokenResult->accessToken
+            'token' => $tokenResult->accessToken,
+            'expires_at' => Carbon::parse(
+                $tokenResult->token->expires_at
+            )->toDateTimeString()
         ], 200);
     }
 
